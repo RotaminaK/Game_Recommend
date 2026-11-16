@@ -1,5 +1,7 @@
 # 🎮 게임 취향 분석기
 
+[GitHub · RotaminaK/Game_Recommend](https://github.com/RotaminaK/Game_Recommend)
+
 게임에 별점을 남기면 취향이 비슷한 사용자 10명을 찾고, 그 사용자들이 높게 평가한 게임을 최대 3개 추천하는 Streamlit 앱입니다.
 
 **Hugging Face에서 가져온 Metacritic 사용자 리뷰·평점 데이터를 기반으로 추천합니다.** 내가 입력한 별점과 기존 사용자들의 평가를 비교해 예상 별점을 계산하며, OpenAI API 키를 입력하면 게임별 추천 이유와 이미지가 없는 게임의 대체 이미지를 생성합니다.
@@ -54,7 +56,7 @@
 - 주요 열: `Author`, `Game`, `Score`, `Review`
 - 원본의 10점 척도를 2로 나눠 5점 척도로 사용합니다.
 
-앱은 `07_project/data/train-00000-of-00001.parquet` 파일을 먼저 읽습니다. 파일이 없으면 Hugging Face에서 다운로드하고 해당 위치에 저장합니다. **첫 실행에는 인터넷 연결과 다운로드 시간이 필요합니다.**
+앱은 저장소 내 `data/train-00000-of-00001.parquet` 파일을 먼저 읽습니다. 파일이 없으면 Hugging Face에서 다운로드하고 해당 위치에 저장합니다. **첫 실행에는 인터넷 연결과 다운로드 시간이 필요합니다.**
 
 원본을 읽지 못하면 프로젝트 폴더의 `metacritic_reviews_1.csv`~`metacritic_reviews_3.csv` 중 존재하는 파일을 대신 읽습니다. 이 CSV들은 원본 Parquet과 다른 데이터이므로 게임 목록과 추천 결과가 달라질 수 있으며, 대체 데이터 사용 여부를 화면에 표시합니다.
 
@@ -69,13 +71,14 @@
 
 ## 설치 및 실행
 
-Python과 `pip`가 필요합니다. 아래 명령은 **이 README와 `requirements.txt`가 있는 `07_project` 폴더**를 기준으로 실행합니다. Python 코드만 직접 실행하거나 노트북에서 실행하지 말고 Streamlit으로 실행하세요.
+Python과 `pip`가 필요하며, 아래 복제 명령을 사용하려면 Git도 설치되어 있어야 합니다. 이미 저장소를 내려받았다면 `git clone`과 `cd`를 생략하고 **이 README와 `requirements.txt`가 있는 `Game_Recommend` 폴더**에서 가상환경 생성부터 진행하세요. Python 코드만 직접 실행하거나 노트북에서 실행하지 말고 Streamlit으로 실행하세요.
 
 ### Windows · PowerShell
 
 ```powershell
-# 저장소 최상위 폴더에서 이동
-cd 07_project
+# 저장소 복제 및 이동
+git clone https://github.com/RotaminaK/Game_Recommend.git
+cd Game_Recommend
 
 # 가상환경 생성
 python -m venv .venv
@@ -90,7 +93,9 @@ python -m venv .venv
 ### macOS / Linux
 
 ```bash
-cd 07_project
+git clone https://github.com/RotaminaK/Game_Recommend.git
+cd Game_Recommend
+
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python -m streamlit run game_taste_analyzer.py
@@ -134,7 +139,7 @@ Steam 이미지를 우선 사용하고, 없으면 Wikimedia Commons와 Wikipedia
 ## 파일 구성
 
 ```text
-07_project/
+Game_Recommend/
 ├── game_taste_analyzer.py       # Streamlit 앱과 추천·이미지 처리
 ├── requirements.txt            # 실행 의존성
 ├── README.md
@@ -151,7 +156,7 @@ Steam 이미지를 우선 사용하고, 없으면 Wikimedia Commons와 Wikipedia
 
 ## 테스트
 
-`07_project` 폴더에서 실행합니다. API를 호출하거나 이미지를 생성하지 않습니다.
+저장소 최상위 폴더에서 실행합니다. API를 호출하거나 이미지를 생성하지 않습니다.
 
 ```powershell
 # Windows
@@ -167,7 +172,7 @@ Steam 이미지를 우선 사용하고, 없으면 Wikimedia Commons와 Wikipedia
 
 ## Git 업로드 시 참고
 
-API 키를 코드·노트북 출력·스크린샷에 포함하지 마세요. 원본 Parquet은 앱이 다운로드하므로 Git에 포함하지 않아도 실행할 수 있습니다. 아래는 **`07_project/.gitignore`에 넣을 수 있는 예시**입니다.
+API 키를 코드·노트북 출력·스크린샷에 포함하지 마세요. 원본 Parquet은 앱이 다운로드하므로 Git에 포함하지 않아도 실행할 수 있습니다. 아래는 **저장소 최상위 `.gitignore`에 넣을 수 있는 예시**입니다.
 
 ```gitignore
 .env
