@@ -1,6 +1,5 @@
 # 🎮 게임 취향 분석기
 
-[GitHub · RotaminaK/Game_Recommend](https://github.com/RotaminaK/Game_Recommend)
 
 게임에 별점을 남기면 취향이 비슷한 사용자 10명을 찾고, 그 사용자들이 높게 평가한 게임을 최대 3개 추천하는 Streamlit 앱입니다.
 
