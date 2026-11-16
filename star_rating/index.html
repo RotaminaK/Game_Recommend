@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<style>
+  body {margin:0;background:transparent;color:#f5f7ff;font-family:system-ui,sans-serif}
+  #stars {display:flex;gap:4px;align-items:center;justify-content:center;padding:6px 2px}
+  .star {position:relative;font-size:42px;line-height:52px;width:44px;height:52px;flex-shrink:0}
+  .empty {color:#64708a}
+  .fill {position:absolute;left:0;top:0;color:#ffcb52;overflow:hidden;pointer-events:none;width:0}
+  button {position:absolute;top:0;width:50%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;border-radius:4px}
+  button.left {left:0} button.right {right:0}
+  button:focus-visible {outline:2px solid #fff;outline-offset:0}
+  #score {font-size:15px;color:#c7cbe0;margin:4px 0;text-align:center}
+</style>
+<div id="stars" role="group" aria-label="별점 선택"></div>
+<div id="score" aria-live="polite">별점을 선택하세요</div>
+<script>
+  const root = document.getElementById('stars');
+  let selected = 0;
+  const send = (type, data = {}) => window.parent.postMessage({isStreamlitMessage:true,type,...data}, '*');
+  function paint(value) {
+    document.querySelectorAll('.fill').forEach((el, i) => {
+      el.style.width = `${Math.max(0, Math.min(1, value - i)) * 100}%`;
+    });
+    document.getElementById('score').textContent = value ? `${value.toFixed(1)} / 5점` : '별점을 선택하세요';
+  }
+  for (let i = 0; i < 5; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.innerHTML = '<span class="empty" aria-hidden="true">★</span><span class="fill" aria-hidden="true">★</span>';
+    for (let half = 1; half <= 2; half++) {
+      const value = i + half / 2;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = half === 1 ? 'left' : 'right';
+      button.setAttribute('aria-label', `${value}점`);
+      button.setAttribute('aria-pressed', 'false');
+      button.addEventListener('mouseenter', () => paint(value));
+      button.addEventListener('focus', () => paint(value));
+      button.addEventListener('blur', () => paint(selected));
+      button.addEventListener('click', () => {
+        if (selected) return;
+        selected = value;
+        root.querySelectorAll('button').forEach(el => {
+          el.setAttribute('aria-pressed', String(el === button));
+          el.disabled = true;
+        });
+        paint(selected);
+        send('streamlit:setComponentValue', {value:selected,dataType:'json'});
+      });
+      star.appendChild(button);
+    }
+    root.appendChild(star);
+  }
+  root.addEventListener('mouseleave', () => paint(selected));
+  window.addEventListener('message', event => {
+    if (event.source !== window.parent || event.data.type !== 'streamlit:render') return;
+    send('streamlit:setFrameHeight', {height:100});
+  });
+  send('streamlit:componentReady', {apiVersion:1});
+  send('streamlit:setFrameHeight', {height:100});
+</script>
+</html>
