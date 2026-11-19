@@ -70,6 +70,11 @@
 
 ## 설치 및 실행
 
+- 링크
+다른 설치나 다운로드 없이 링크 통해서 플레이 가능합니다.
+https://gamerecommend-eu66rxfmmtl6j7z7pxdvdd.streamlit.app/
+
+- 설치
 Python과 `pip`가 필요하며, 아래 복제 명령을 사용하려면 Git도 설치되어 있어야 합니다. 이미 저장소를 내려받았다면 `git clone`과 `cd`를 생략하고 **이 README와 `requirements.txt`가 있는 `Game_Recommend` 폴더**에서 가상환경 생성부터 진행하세요. Python 코드만 직접 실행하거나 노트북에서 실행하지 말고 Streamlit으로 실행하세요.
 
 ### Windows · PowerShell
